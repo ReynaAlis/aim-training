@@ -6,6 +6,7 @@ const board = document.querySelector('#board');
 const color = ['#78DBE2', '#32CD32', '#721422', '#2271B3', '#CEFF1D', '#926EAE', '#87CEFA', '#FF7F49'];
 let score = 0;
 let time = 0;
+let interval; 
 
 const clickSound = new Audio('sound/button-click.wav');
 
@@ -27,7 +28,6 @@ board.addEventListener('click', event => {
         score++;
         event.target.remove();
         createRandomCircle();
-
         clickSound.play();
     }
 });
@@ -35,20 +35,18 @@ board.addEventListener('click', event => {
 function startGame() {
     score = 0;
     timeEl.parentNode.classList.remove('hide');
-    timeEl.innerHTML = `00:${time < 10 ? `0${time}` : time}`;
-    setInterval(decreaseTime, 1000);
+    setTime(time);
+    interval = setInterval(decreaseTime, 1000);
     createRandomCircle();
 }
 
 function decreaseTime() {
     if (time === 0) {
+        clearInterval(interval);
         finishGame();
     } else {
-        let current = --time;
-        if (current < 10) {
-            current = `0${current}`;
-        }
-        setTime(current);
+        time--;
+        setTime(time < 10 ? `0${time}` : time);
     }
 }
 
@@ -58,10 +56,11 @@ function setTime(value) {
 
 function finishGame() {
     timeEl.parentNode.classList.add('hide');
+
     board.innerHTML = `
         <div class="result-container">
-            <h1>Счет: <span class="primary">${score}</span></h1>
-            <button id="restart" class="restart-btn">Начать новую игру</button>
+            <h1>Score: <span class="primary">${score}</span></h1>
+            <button id="restart" class="restart-btn">Play Again</button>
         </div>
     `;
 
@@ -94,3 +93,6 @@ function getRandomNumber(min, max) {
 function getRandomColor() {
     return color[Math.floor(Math.random() * color.length)];
 }
+
+
+
