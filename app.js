@@ -7,6 +7,8 @@ const color = ['#78DBE2', '#32CD32', '#721422', '#2271B3', '#CEFF1D', '#926EAE',
 let score = 0;
 let time = 0;
 
+const clickSound = new Audio('sound/button-click.wav');
+
 startBtn.addEventListener('click', (event) => {
     event.preventDefault();
     screens[0].classList.add('up');
@@ -25,6 +27,8 @@ board.addEventListener('click', event => {
         score++;
         event.target.remove();
         createRandomCircle();
+
+        clickSound.play();
     }
 });
 
@@ -63,7 +67,7 @@ function finishGame() {
 
     const restartBtn = document.querySelector('#restart');
     restartBtn.addEventListener('click', () => {
-        location.reload(); // Перезагружает страницу для начала новой игры
+        location.reload();
     });
 }
 
